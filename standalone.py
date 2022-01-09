@@ -4,10 +4,10 @@ import yaml
 import time
 
 try:
-    with open('conf.yml', 'r') as conffile:
+    with open('tconf.yml', 'r') as conffile:
         config = yaml.full_load(conffile)
 except FileNotFoundError:
-    with open('tconf.yml', 'r') as conffile:
+    with open('conf.yml', 'r') as conffile:
         config = yaml.full_load(conffile)
 
 version = config['version']
@@ -31,10 +31,17 @@ def twrexit():
     exit()
 
 
+def twrversion():
+    """Выводит версию и возвращается к ожиданию ввода команды."""
+    print(f'TWR Player v.: {version}')
+    commandwait()
+
+
 def commandwait():
     """Ожидание и реакция на ввод команд."""
     command = input('press P to play\n'
                     'S to stop\n'
+                    'V to show version info\n'
                     'E for exit\n\n')
     if command in ['S', 's']:
         twrstop()
@@ -43,17 +50,15 @@ def commandwait():
     elif command in ['E', 'e']:
         twrexit()
     elif command in ['V', 'v']:
-        print(version)
+        twrversion()
 
 
-instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
+instance = vlc.Instance('--input-repeat=-1')
 player = instance.media_player_new()
 media = instance.media_new(stream_url)
 player.set_media(media)
 player.audio_set_volume(20)
 
-print(f'TWR Player v.: {version}')
-
-time.sleep(2)
+time.sleep(1)
 stream_title = player.audio_get_track()
-commandwait()
+twrversion()
