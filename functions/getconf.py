@@ -25,7 +25,8 @@ def twrconf():
 
     stream_url = config['url']
     version = config['version']
-    return version, stream_url
+    nowplaying = config['metaurl']
+    return version, stream_url, nowplaying
 
 if __name__ == '__main__':
     twrconf()
